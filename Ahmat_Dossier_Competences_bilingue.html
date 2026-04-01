@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abdel-Aziz AHMAT — Dossier de compétences</title>
+  <meta name="description" content="Administrateur systèmes et réseaux – Alternance 2026" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --surface: #161922;
+      --border: #252a36;
+      --accent: #4fffb0;
+      --accent2: #5e9cff;
+      --text: #e8ecf5;
+      --muted: #8892a4;
+      --tag-bg: #1e2535;
+      --name-color: #ffffff;
+      --shadow: rgba(0,0,0,0.3);
+      --li-color: #c8cedc;
+    }
+
+    :root.light {
+      --bg: #f4f6fb;
+      --surface: #ffffff;
+      --border: #dde2ee;
+      --accent: #00a86b;
+      --accent2: #2563eb;
+      --text: #1a1f2e;
+      --muted: #6b7591;
+      --tag-bg: #edf0f8;
+      --name-color: #0f1523;
+      --shadow: rgba(0,0,0,0.08);
+      --li-color: #3d4663;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background .3s, color .3s;
+    }
+
+    .toolbar {
+      position: fixed;
+      top: 1rem; right: 1rem;
+      z-index: 100;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .tool-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 0.4rem 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      box-shadow: 0 2px 12px var(--shadow);
+      transition: border-color .2s, color .2s, background .3s, box-shadow .3s;
+      user-select: none;
+    }
+    .tool-btn:hover { border-color: var(--accent); color: var(--text); }
+    .toggle-icon { font-size: 1rem; transition: transform .4s ease; }
+    .tool-btn:hover .toggle-icon { transform: rotate(20deg); }
+
+    .header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 1.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: background .3s, border-color .3s;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 260px; height: 260px;
+      background: radial-gradient(circle, rgba(78,255,176,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .header-inner { max-width: 800px; margin: 0 auto; }
+
+    .name-block {
+      display: flex; flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 1rem; margin-bottom: 0.75rem;
+    }
+    .name {
+      font-size: clamp(1.8rem, 6vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      color: var(--name-color);
+      transition: color .3s;
+    }
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #0d0f14;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem; font-weight: 500;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      letter-spacing: 0.06em;
+      margin-top: 0.5rem;
+      white-space: nowrap;
+    }
+    .title {
+      font-size: clamp(1rem, 3vw, 1.35rem);
+      font-weight: 600; color: var(--accent2);
+      margin-bottom: 0.35rem;
+    }
+    .subtitle {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.9rem; color: var(--muted);
+      margin-bottom: 1.5rem; line-height: 1.5;
+    }
+    .links-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .link-chip {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--tag-bg); border: 1px solid var(--border);
+      padding: 0.35rem 0.75rem; border-radius: 20px;
+      font-family: 'DM Mono', monospace; font-size: 0.73rem;
+      color: var(--accent2); text-decoration: none;
+      transition: border-color .2s, color .2s, background .3s;
+    }
+    .link-chip:hover { border-color: var(--accent2); color: var(--text); }
+
+    .info-strip {
+      background: var(--bg); padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      transition: background .3s, border-color .3s;
+    }
+    .info-grid {
+      max-width: 800px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.75rem;
+    }
+    .info-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 0.85rem 1rem;
+      transition: background .3s, border-color .3s;
+    }
+    .info-label {
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.1em; color: var(--muted);
+      text-transform: uppercase; margin-bottom: 0.3rem;
+    }
+    .info-value { font-size: 0.88rem; font-weight: 600; color: var(--text); line-height: 1.35; }
+    .info-value.accent { color: var(--accent); }
+
+    .main {
+      max-width: 800px; margin: 0 auto;
+      padding: 1.5rem 1.5rem 4rem;
+      display: flex; flex-direction: column; gap: 2rem;
+    }
+    .section-title {
+      font-family: 'DM Mono', monospace; font-size: 0.7rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .skills-grid { display: flex; flex-direction: column; gap: 0.5rem; }
+    .skill-row { display: grid; grid-template-columns: 160px 1fr; gap: 0.75rem; align-items: start; }
+    @media (max-width: 500px) { .skill-row { grid-template-columns: 1fr; gap: 0.25rem; } }
+    .skill-cat { font-size: 0.82rem; font-weight: 700; color: var(--muted); padding-top: 0.2rem; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tag {
+      background: var(--tag-bg); border: 1px solid var(--border);
+      border-radius: 6px; padding: 0.25rem 0.6rem;
+      font-family: 'DM Mono', monospace; font-size: 0.73rem;
+      color: var(--text); white-space: nowrap;
+      transition: background .3s, border-color .3s, color .3s;
+    }
+    .tag.highlight {
+      border-color: rgba(78,255,176,0.35);
+      color: var(--accent);
+      background: rgba(78,255,176,0.05);
+    }
+    :root.light .tag.highlight {
+      border-color: rgba(0,168,107,0.3);
+      background: rgba(0,168,107,0.06);
+    }
+
+    .exp-list { display: flex; flex-direction: column; gap: 1rem; }
+    .exp-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.2rem 1.3rem;
+      position: relative; overflow: hidden;
+      transition: border-color .2s, background .3s;
+    }
+    .exp-card:hover { border-color: rgba(94,156,255,0.4); }
+    .exp-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: var(--accent2); border-radius: 3px 0 0 3px;
+    }
+    .exp-card.current::before { background: var(--accent); }
+    .exp-header {
+      display: flex; flex-wrap: wrap;
+      justify-content: space-between; align-items: flex-start;
+      gap: 0.4rem; margin-bottom: 0.3rem;
+    }
+    .exp-title { font-size: 0.97rem; font-weight: 700; color: var(--name-color); line-height: 1.3; }
+    .exp-date { font-family: 'DM Mono', monospace; font-size: 1rem; color: var(--muted); white-space: nowrap; padding-top: 0.15rem; }
+    .exp-company { font-size: 0.82rem; color: var(--accent2); font-weight: 600; margin-bottom: 0.15rem; }
+    .exp-card.current .exp-company { color: var(--accent); }
+    .exp-location { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); margin-bottom: 0.85rem; }
+    .distinction-badge {
+      display: inline-block;
+      background: rgba(255,200,0,0.1); border: 1px solid rgba(255,200,0,0.3);
+      color: #d4a000; font-family: 'DM Mono', monospace;
+      font-size: 0.67rem; padding: 0.2rem 0.55rem; border-radius: 4px; margin-bottom: 0.85rem;
+    }
+    :root.light .distinction-badge { color: #9a7300; }
+    .missions { margin-bottom: 0.9rem; }
+    .mission-group { margin-bottom: 0.6rem; }
+    .mission-version { font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+    .mission-list { list-style: none; display: flex; flex-direction: column; gap: 0.2rem; }
+    .mission-list li {
+      font-size: 0.95rem; color: var(--li-color);
+      padding-left: 1rem; position: relative; line-height: 1.5;
+    }
+    .mission-list li::before { content: '›'; position: absolute; left: 0; color: var(--accent2); font-weight: 700; }
+    .exp-card.current .mission-list li::before { color: var(--accent); }
+    .exp-tech { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.75rem; }
+    .tech-tag {
+      background: rgba(94,156,255,0.08); border: 1px solid rgba(94,156,255,0.2);
+      color: var(--accent2); font-family: 'DM Mono', monospace;
+      font-size: 0.68rem; padding: 0.18rem 0.5rem; border-radius: 4px;
+      transition: background .3s;
+    }
+    .exp-card.current .tech-tag {
+      background: rgba(78,255,176,0.07); border-color: rgba(78,255,176,0.2); color: var(--accent);
+    }
+    :root.light .exp-card.current .tech-tag {
+      background: rgba(0,168,107,0.07); border-color: rgba(0,168,107,0.25);
+    }
+
+    .homelab-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1rem 1.3rem;
+      display: flex; align-items: center; gap: 1rem;
+      transition: background .3s, border-color .3s;
+    }
+    .homelab-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .homelab-text { font-size: 0.88rem; color: var(--text); font-weight: 600; }
+    .homelab-sub { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
+  </style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button class="tool-btn" onclick="toggleLang()" aria-label="Changer la langue">
+    <span id="langLabel">EN</span>
+  </button>
+  <button class="tool-btn" onclick="toggleTheme()" aria-label="Changer le theme">
+    <span class="toggle-icon" id="themeIcon">&#9728;&#65039;</span>
+    <span id="themeLabel">Light</span>
+  </button>
+</div>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="name-block">
+      <div><div class="name">Abdel-Aziz<br>AHMAT</div></div>
+      <span class="badge" data-fr="ALTERNANCE · SEPT. 2026" data-en="APPRENTICESHIP · SEPT. 2026">ALTERNANCE · SEPT. 2026</span>
+    </div>
+    <div class="title" data-fr="Administrateur systèmes et réseaux" data-en="Systems and Network Administrator">Administrateur systèmes et réseaux</div>
+    <div class="subtitle" data-fr="B3 — Programme Administrateur réseau NetOps · RNCP 36163 niveau 6" data-en="B3 — NetOps Network Administrator Program · RNCP 36163 level 6">B3 — Programme Administrateur réseau NetOps · RNCP 36163 niveau 6</div>
+    <div class="links-row">
+      <a href="https://www.linkedin.com/in/3a1m/" class="link-chip" target="_blank"><span>&#128279;</span> LinkedIn</a>
+      <a href="http://www.credly.com/users/3a1m" class="link-chip" target="_blank"><span>&#127885;</span> Credly</a>
+      <a href="mailto:harire.ahmat@capgemini.com" class="link-chip"><span>&#9993;</span> <span data-fr="Réf. Capgemini" data-en="Ref. Capgemini">Réf. Capgemini</span></a>
+      <a href="mailto:haniya.zenabou-bello@alenia.io" class="link-chip"><span>&#9993;</span> <span data-fr="Réf. Alenia" data-en="Ref. Alenia">Réf. Alenia</span></a>
+    </div>
+  </div>
+</header>
+
+<div class="info-strip">
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-label" data-fr="Postes visés" data-en="Target roles">Postes visés</div>
+      <div class="info-value" data-fr="Admin systèmes & réseaux · Infrastructure · Cloud" data-en="Systems & Network Admin · Infrastructure · Cloud">Admin systèmes & réseaux · Infrastructure · Cloud</div>
+    </div>
+    <div class="info-card">
+      <div class="info-label" data-fr="Rythme" data-en="Schedule">Rythme</div>
+      <div class="info-value accent" data-fr="3 sem. entreprise / 1 sem. école" data-en="3 weeks company / 1 week school">3 sem. entreprise / 1 sem. école</div>
+    </div>
+    <div class="info-card">
+      <div class="info-label" data-fr="Zone" data-en="Location">Zone</div>
+      <div class="info-value" data-fr="Paris · Île-de-France · Télétravail OK" data-en="Paris · Île-de-France · Remote OK">Paris · Île-de-France · Télétravail OK</div>
+    </div>
+    <div class="info-card">
+      <div class="info-label" data-fr="Disponibilité" data-en="Availability">Disponibilité</div>
+      <div class="info-value accent" data-fr="Juillet 2026 — 1 an" data-en="July 2026 — 1 year">Juillet 2026 — 1 an</div>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+  <section>
+    <div class="section-title" data-fr="Compétences" data-en="Skills">Compétences</div>
+    <div class="skills-grid">
+      <div class="skill-row">
+        <div class="skill-cat" data-fr="Systèmes" data-en="Systems">Systèmes</div>
+        <div class="skill-tags">
+          <span class="tag highlight">Debian</span>
+          <span class="tag highlight">Ubuntu</span>
+          <span class="tag highlight">Windows Server</span>
+          <span class="tag">Active Directory</span>
+          <span class="tag">GPO</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-cat" data-fr="Réseaux" data-en="Networks">Réseaux</div>
+        <div class="skill-tags">
+          <span class="tag">VLAN</span>
+          <span class="tag">VPN</span>
+          <span class="tag" data-fr="Routage" data-en="Routing">Routage</span>
+          <span class="tag">DHCP</span>
+          <span class="tag">DNS</span>
+          <span class="tag">pfSense</span>
+          <span class="tag" data-fr="Segmentation" data-en="Segmentation">Segmentation</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-cat" data-fr="Infrastructure" data-en="Infrastructure">Infrastructure</div>
+        <div class="skill-tags">
+          <span class="tag highlight">Proxmox</span>
+          <span class="tag">VMware</span>
+          <span class="tag">Hyper-V</span>
+          <span class="tag highlight">Docker</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-cat" data-fr="Supervision" data-en="Monitoring">Supervision</div>
+        <div class="skill-tags">
+          <span class="tag highlight">Prometheus</span>
+          <span class="tag highlight">Grafana</span>
+          <span class="tag">Zabbix</span>
+          <span class="tag" data-fr="Analyse logs" data-en="Log analysis">Analyse logs</span>
+          <span class="tag">Alerting</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-cat" data-fr="Automatisation" data-en="Automation">Automatisation</div>
+        <div class="skill-tags">
+          <span class="tag highlight">Python</span>
+          <span class="tag">Bash</span>
+          <span class="tag">PowerShell</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-cat" data-fr="Exploitation" data-en="Operations">Exploitation</div>
+        <div class="skill-tags">
+          <span class="tag">MCO</span>
+          <span class="tag" data-fr="Gestion incidents" data-en="Incident management">Gestion incidents</span>
+          <span class="tag" data-fr="Documentation" data-en="Documentation">Documentation</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-cat" data-fr="Langues" data-en="Languages">Langues</div>
+        <div class="skill-tags">
+          <span class="tag" data-fr="Français (maternel)" data-en="French (native)">Français (maternel)</span>
+          <span class="tag highlight" data-fr="Anglais C1 — TOEIC 920" data-en="English C1 — TOEIC 920">Anglais C1 — TOEIC 920</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title" data-fr="Expériences & Projets" data-en="Experience & Projects">Expériences & Projets</div>
+    <div class="exp-list">
+
+      <div class="exp-card current">
+        <div class="exp-header">
+          <div class="exp-title" data-fr="Développeur automatisation via IA (Freelance)" data-en="AI Automation Developer (Freelance)">Développeur automatisation via IA (Freelance)</div>
+          <div class="exp-date"><span data-fr="02/2026 → présent" data-en="02/2026 → present">02/2026 → présent</span></div>
+        </div>
+        <div class="exp-company">Alenia Consulting</div>
+        <div class="exp-location">Remote</div>
+        <div class="missions">
+          <div class="mission-group">
+            <div class="mission-version">— V1</div>
+            <ul class="mission-list">
+              <li data-fr="Conception d'un pipeline LMS automatisé PowerShell" data-en="Design of an automated LMS pipeline in PowerShell">Conception d'un pipeline LMS automatisé PowerShell</li>
+              <li data-fr="Scripts de génération audio via API TTS" data-en="Audio generation scripts through a TTS API">Scripts de génération audio via API TTS</li>
+              <li data-fr="Interface web locale pour piloter les scripts" data-en="Local web interface to control the scripts">Interface web locale pour piloter les scripts</li>
+            </ul>
+          </div>
+          <div class="mission-group">
+            <div class="mission-version" data-fr="— V2 (en cours)" data-en="— V2 (ongoing)">— V2 (en cours)</div>
+            <ul class="mission-list">
+              <li data-fr="Migration scripts PowerShell → Python" data-en="Migration of PowerShell scripts to Python">Migration scripts PowerShell → Python</li>
+              <li data-fr="Migration API TTS vers moteur IA TTS intégré" data-en="Migration from TTS API to an integrated AI TTS engine">Migration API TTS vers moteur IA TTS intégré</li>
+              <li data-fr="Migration interface web vers PWA & client lourd Electron" data-en="Migration of the web interface to PWA & Electron desktop client">Migration interface web vers PWA & client lourd Electron</li>
+            </ul>
+          </div>
+        </div>
+        <div class="exp-tech">
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">PowerShell</span>
+          <span class="tech-tag">HTML/CSS/JS</span>
+          <span class="tech-tag">Kokoro TTS</span>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-header">
+          <div class="exp-title" data-fr="Administrateur systèmes junior / Support & supervision" data-en="Junior Systems Administrator / Support & Monitoring">Administrateur systèmes junior / Support & supervision</div>
+          <div class="exp-date">01/2025 → 06/2025</div>
+        </div>
+        <div class="exp-company">EasiestVM</div>
+        <div class="exp-location">Ivry-sur-Seine, France</div>
+        <div class="missions">
+          <ul class="mission-list">
+            <li data-fr="Administration d'une infrastructure Proxmox (20 VM)" data-en="Administration of a Proxmox infrastructure (20 VMs)">Administration d'une infrastructure Proxmox (20 VM)</li>
+            <li data-fr="Mise en place supervision Prometheus & dashboards Grafana" data-en="Deployment of Prometheus monitoring & Grafana dashboards">Mise en place supervision Prometheus & dashboards Grafana</li>
+            <li data-fr="Analyse, traitement et documentation d'alertes d'infrastructure" data-en="Analysis, processing and documentation of infrastructure alerts">Analyse, traitement et documentation d'alertes d'infrastructure</li>
+          </ul>
+        </div>
+        <div class="exp-tech">
+          <span class="tech-tag">Proxmox</span>
+          <span class="tech-tag">Prometheus</span>
+          <span class="tech-tag">Grafana</span>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-header">
+          <div class="exp-title" data-fr="Technicien systèmes réseaux" data-en="Systems and Network Technician">Technicien systèmes réseaux</div>
+          <div class="exp-date">10/2024 → 02/2025</div>
+        </div>
+        <div class="exp-company">CollabTech</div>
+        <div class="exp-location">Ivry-sur-Seine, France</div>
+        <div class="distinction-badge" data-fr="🏆 1ʳᵉ place Concours TechDay ESIEA" data-en="🏆 1st place — ESIEA TechDay Competition">🏆 1ʳᵉ place Concours TechDay ESIEA</div>
+        <div class="missions">
+          <ul class="mission-list">
+            <li data-fr="Déploiement d'un serveur collaboratif Nextcloud, Collabora, MariaDB" data-en="Deployment of a collaborative server with Nextcloud, Collabora, MariaDB">Déploiement d'un serveur collaboratif Nextcloud, Collabora, MariaDB</li>
+            <li data-fr="Gestion des comptes utilisateurs et droits d'accès" data-en="Management of user accounts and access rights">Gestion des comptes utilisateurs et droits d'accès</li>
+            <li data-fr="Supervision des services avec Zabbix et traitement d'incidents" data-en="Service monitoring with Zabbix and incident handling">Supervision des services avec Zabbix et traitement d'incidents</li>
+          </ul>
+        </div>
+        <div class="exp-tech">
+          <span class="tech-tag">Nextcloud</span>
+          <span class="tech-tag">MariaDB</span>
+          <span class="tech-tag">Zabbix</span>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-header">
+          <div class="exp-title" data-fr="Technicien support informatique (Bénévole)" data-en="IT Support Technician (Volunteer)">Technicien support informatique (Bénévole)</div>
+          <div class="exp-date">08/2023 → 02/2026</div>
+        </div>
+        <div class="exp-company">Ludilab</div>
+        <div class="exp-location">Ivry-sur-Seine, France</div>
+        <div class="missions">
+          <ul class="mission-list">
+            <li data-fr="Administration et maintenance de 14 postes Windows et Linux" data-en="Administration and maintenance of 14 Windows and Linux workstations">Administration et maintenance de 14 postes Windows et Linux</li>
+            <li data-fr="Gestion du réseau interne et sécurisation de l'accès Internet" data-en="Management of the internal network and Internet access security">Gestion du réseau interne et sécurisation de l'accès Internet</li>
+            <li data-fr="Support utilisateurs N1 et N2 & résolution d'incidents" data-en="L1/L2 user support and incident resolution">Support utilisateurs N1 et N2 & résolution d'incidents</li>
+          </ul>
+        </div>
+        <div class="exp-tech">
+          <span class="tech-tag">Windows</span>
+          <span class="tech-tag">Linux</span>
+          <span class="tech-tag">Support N1/N2</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title" data-fr="Projet personnel" data-en="Personal Project">Projet personnel</div>
+    <div class="homelab-card">
+      <div class="homelab-icon">&#128187;</div>
+      <div>
+        <div class="homelab-text" data-fr="Homelab : NAS + supervision + dashboard (Homarr)" data-en="Homelab: NAS + monitoring + dashboard (Homarr)">Homelab : NAS + supervision + dashboard (Homarr)</div>
+        <div class="homelab-sub" data-fr="Infrastructure locale autonome · self-hosted" data-en="Autonomous local infrastructure · self-hosted">Infrastructure locale autonome · self-hosted</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  var root = document.documentElement;
+  var icon = document.getElementById('themeIcon');
+  var themeLabel = document.getElementById('themeLabel');
+  var langLabel = document.getElementById('langLabel');
+  var isLight = false;
+  var currentLang = 'fr';
+
+  function applyLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-fr]').forEach(function(el) {
+      var value = el.getAttribute('data-' + lang);
+      if (value !== null) el.textContent = value;
+    });
+    langLabel.textContent = lang === 'fr' ? 'EN' : 'FR';
+    try { localStorage.setItem('lang', lang); } catch(e) {}
+  }
+
+  function toggleLang() {
+    applyLanguage(currentLang === 'fr' ? 'en' : 'fr');
+  }
+
+  function applyTheme(lightMode) {
+    isLight = lightMode;
+    root.classList.toggle('light', isLight);
+    icon.innerHTML = isLight ? '&#127769;' : '&#9728;&#65039;';
+    themeLabel.textContent = isLight ? 'Dark' : 'Light';
+    try { localStorage.setItem('theme', isLight ? 'light' : 'dark'); } catch(e) {}
+  }
+
+  function toggleTheme() {
+    applyTheme(!isLight);
+  }
+
+  try {
+    var savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') applyTheme(true);
+    var savedLang = localStorage.getItem('lang');
+    if (savedLang === 'en') applyLanguage('en');
+  } catch(e) {}
+</script>
+</body>
+</html>
